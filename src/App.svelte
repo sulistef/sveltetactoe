@@ -1,19 +1,28 @@
 <script>
-import { bubble } from "svelte/internal";
+	import { fade } from 'svelte/transition';
 
-
-	let board = ['', '', '', '', '', '', '', '', ''];
+	let board = new Array(9).fill('');
 	let player = 'X';
 	let playable = true;
+	let win = false;
 
 	const check = (cell) => {
 		if (playable) {
-			board[cell] = player;
-			checkVictory(board);
-			if (checkEmptyCell(board) === false) draw();
-			player === 'X' ? player = 'O' : player = 'X'
+			if (checkEmpty(board, cell)) {
+				board[cell] = player;
+				checkVictory(board);
+				if (checkEmptyCell(board) === false) draw();
+				player === 'X' ? player = 'O' : player = 'X'
+			} else {
+				alert("Vous ne pouvez pas jouer sur cette case");
+			}
 		};
 	};
+
+	const checkEmpty = (game, cell) => { 
+		if (game[cell] !== '') return false;
+		else return true;
+	}
 
 	const defineClass = (val) => {
 		if (val === "X") return "cross"
@@ -21,26 +30,29 @@ import { bubble } from "svelte/internal";
 	};
 
 	const checkVictory = (game) => {
-		if(game[0] !== '' && game[1] !== '' && game[2] !== '' && game[0] === game[1] && game[1] === game[2]) victoire()
-		else if (game[3] !== '' && game[4] !== '' && game[5] !== '' && game[3] === game[4] && game[4] === game[5]) victoire()
-		else if (game[6] !== '' && game[7] !== '' && game[8] !== '' && game[6] === game[7] && game[7] === game[8]) victoire()
-		else if (game[0] !== '' && game[3] !== '' && game[6] !== '' && game[0] === game[3] && game[3] === game[6]) victoire()
-		else if (game[1] !== '' && game[4] !== '' && game[7] !== '' && game[1] === game[4] && game[4] === game[7]) victoire()
-		else if (game[2] !== '' && game[5] !== '' && game[8] !== '' && game[2] === game[5] && game[5] === game[8]) victoire()
-		else if (game[0] !== '' && game[4] !== '' && game[8] !== '' && game[0] === game[4] && game[4] === game[8]) victoire()
-		else if (game[2] !== '' && game[4] !== '' && game[6] !== '' && game[2] === game[4] && game[4] === game[6]) victoire()
+		if(equality(game, 0, 1, 2)) victoire()
+		else if (equality(game, 3, 4, 5)) victoire()
+		else if (equality(game, 6, 7, 8)) victoire()
+		else if (equality(game, 0, 3, 6)) victoire()
+		else if (equality(game, 1, 4, 7)) victoire()
+		else if (equality(game, 2, 5, 8)) victoire()
+		else if (equality(game, 0, 4, 8)) victoire()
+		else if (equality(game, 2, 4, 6)) victoire()
 	};
+
+	const equality = (game, a, b, c) =>
+		(game[a] !== '' && game[b] !== '' && game[c] !== '' && game[a] === game[b] && game[b] === game[c])
 
 	const checkEmptyCell = (game) =>
 		game.map(valeur => valeur === '').includes(true);
 
 	const victoire = () => {
-		alert("Victoire de " + player);
 		playable = false;
+		win = true;
+		alert("Victoire de " + player);
 	};
 
 	const draw = () => {
-		if 
 		alert("Egalité !");
 		playable = false;
 	};
@@ -59,7 +71,7 @@ import { bubble } from "svelte/internal";
 	<div class="boardGame">
 		<div class="boardRow">
 			<div class="cell" on:click={() => check(0)}>
-				<div class={defineClass(board[0])}>{board[0]}</div>
+				<div class={defineClass(board[0])} transition:fade>{@html board[0]}</div>
 			</div>
 			<div class="cell" on:click={() => check(1)}>
 				<div class={defineClass(board[1])}>{board[1]}</div>
