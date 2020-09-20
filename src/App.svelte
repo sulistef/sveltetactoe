@@ -10,6 +10,7 @@ import { bubble } from "svelte/internal";
 		if (playable) {
 			board[cell] = player;
 			checkVictory(board);
+			if (checkEmptyCell(board) === false) draw();
 			player === 'X' ? player = 'O' : player = 'X'
 		};
 	};
@@ -20,7 +21,6 @@ import { bubble } from "svelte/internal";
 	};
 
 	const checkVictory = (game) => {
-		console.log(checkNotEmptyBoard(game));
 		if(game[0] !== '' && game[1] !== '' && game[2] !== '' && game[0] === game[1] && game[1] === game[2]) victoire()
 		else if (game[3] !== '' && game[4] !== '' && game[5] !== '' && game[3] === game[4] && game[4] === game[5]) victoire()
 		else if (game[6] !== '' && game[7] !== '' && game[8] !== '' && game[6] === game[7] && game[7] === game[8]) victoire()
@@ -31,13 +31,19 @@ import { bubble } from "svelte/internal";
 		else if (game[2] !== '' && game[4] !== '' && game[6] !== '' && game[2] === game[4] && game[4] === game[6]) victoire()
 	};
 
-	const checkNotEmptyBoard = (game) =>
-		game.map(valeur => valeur !== '').includes(true)
+	const checkEmptyCell = (game) =>
+		game.map(valeur => valeur === '').includes(true);
 
 	const victoire = () => {
 		alert("Victoire de " + player);
 		playable = false;
-	}
+	};
+
+	const draw = () => {
+		if 
+		alert("Egalité !");
+		playable = false;
+	};
 
 	const resetGame = () => {
 		board = ['', '', '', '', '', '', '', '', ''];
