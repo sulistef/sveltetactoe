@@ -105,6 +105,7 @@
 	<button on:click={() => resetGame()}>Redémarrer</button>
 
 	<style>
+		
 		.boardGame {
 			width: 200px;
 			height: 200px;
