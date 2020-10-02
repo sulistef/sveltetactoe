@@ -1,5 +1,6 @@
 <script>
-	import { fade } from 'svelte/transition';
+	import Case from './Case.svelte';
+	import _ from 'lodash';
 
 	let board = new Array(9).fill('');
 	let player = 'X';
@@ -23,11 +24,6 @@
 		if (game[cell] !== '') return false;
 		else return true;
 	}
-
-	const defineClass = (val) => {
-		if (val === "X") return "cross"
-		else return "circle";
-	};
 
 	const checkVictory = (game) => {
 		if(equality(game, 0, 1, 2)) victoire()
@@ -61,8 +57,10 @@
 		board = ['', '', '', '', '', '', '', '', ''];
 		playable= true;
 		player = 'X';
-};
-		
+	};
+
+	const couleurFond = (valeur) => 
+		_.isEmpty(valeur) ? 'grisClair' : valeur === 'X' ? 'croix' : 'rond';
 
 </script>
 
@@ -70,27 +68,40 @@
 <h3>A {player} de jouer</h3>
 	<div class="boardGame">
 		<div class="boardRow">
-			<div class="cell" on:click={() => check(0)}>
-				<div class={defineClass(board[0])} transition:fade>{@html board[0]}</div>
+			<div class="cell {couleurFond(board[0])}" on:click={() => check(0)}>
+				<Case lacase={board[0]} />
 			</div>
-			<div class="cell" on:click={() => check(1)}>
-				<div class={defineClass(board[1])}>{board[1]}</div>
+			<div class="cell {couleurFond(board[1])}" on:click={() => check(1)}>
+				<Case lacase={board[1]} />
 			</div>
-			<div class="cell" on:click={() => check(2)}>
-				<div class={defineClass(board[2])}>{board[2]}</div>
+			<div class="cell {couleurFond(board[2])}" on:click={() => check(2)}>
+				<Case lacase={board[2]} />
 			</div>
 		</div>
 		<div class="boardRow">
-			<div class="cell" on:click={() => check(3)}><div class={defineClass(board[3])}>{board[3]}</div></div>
-			<div class="cell" on:click={() => check(4)}><div class={defineClass(board[4])}>{board[4]}</div></div>
-			<div class="cell" on:click={() => check(5)}><div class={defineClass(board[5])}>{board[5]}</div></div>
+			<div class="cell {couleurFond(board[3])}" on:click={() => check(3)}>
+				<Case lacase={board[3]} />
+			</div>
+			<div class="cell {couleurFond(board[4])}" on:click={() => check(4)}>
+				<Case lacase={board[4]} />
+			</div>
+			<div class="cell {couleurFond(board[5])}" on:click={() => check(5)}>
+				<Case lacase={board[5]} />
+			</div>
 		</div>
 		<div class="boardRow">
-			<div class="cell" on:click={() => check(6)}><div class={defineClass(board[6])}>{board[6]}</div></div>
-			<div class="cell" on:click={() => check(7)}><div class={defineClass(board[7])}>{board[7]}</div></div>
-			<div class="cell" on:click={() => check(8)}><div class={defineClass(board[8])}>{board[8]}</div></div>
+			<div class="cell {couleurFond(board[6])}" on:click={() => check(6)}>
+				<Case lacase={board[6]} />
+			</div>
+			<div class="cell {couleurFond(board[7])}" on:click={() => check(7)}>
+				<Case lacase={board[7]} />
+			</div>
+			<div class="cell {couleurFond(board[8])}" on:click={() => check(8)}>
+				<Case lacase={board[8]} />
+			</div>
 		</div>
 	</div>
+
 	<button on:click={() => resetGame()}>Redémarrer</button>
 
 	<style>
@@ -111,23 +122,21 @@
 			flex: 1;
 			display: flex;
 			margin: 3px;
-			background-color: lightgrey;
 			border-radius: 5px;
 			justify-content: center;
 			align-items: center;
 		}
 
-		.circle {
-			font-size: 36px;
-			font-weight: 700;
-			color: brown;
+		.grisClair {
+			background-color: lightgrey;
 		}
 
-		.cross {
-			font-size: 36px;
-			font-weight: 700;
-			color: green;
+		.rond {
+			background-color: lightsalmon;
 		}
-	
-	
+
+		.croix {
+			background-color: lightgreen;
+		}
+		
 	</style>
